@@ -4,47 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stationery Store</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .product { border: 1px solid #ccc; margin: 10px; padding: 10px; display: inline-block; width: 200px; }
+        .shopping-cart { margin-top: 20px; }
+        .cart-item { margin: 5px 0; }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Our Stationery Store</h1>
-        <nav>
-            <ul>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#cart">Cart</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section id="products">
-            <h2>Our Products</h2>
-            <div class="product" data-id="1">
-                <img src="product1.jpg" alt="Product 1">
-                <h3>Notebook</h3>
-                <p>Price: $2.99</p>
-                <button>Add to Cart</button>
-            </div>
-            <div class="product" data-id="2">
-                <img src="product2.jpg" alt="Product 2">
-                <h3>Pens</h3>
-                <p>Price: $1.49</p>
-                <button>Add to Cart</button>
-            </div>
-            <!-- More products here -->
-        </section>
-        <section id="cart">
-            <h2>Your Cart</h2>
-            <div id="cartItems">
-                <!-- Cart items will be added here dynamically -->
-            </div>
-            <p>Total: $<span id="totalPrice">0.00</span></p>
-            <button id="checkout">Checkout</button>
-        </section>
-    </main>
-    <footer>
-        <p>Contact us via WhatsApp: <a href="https://wa.me/11234567890">Chat with us!</a></p>
-    </footer>
-    <script src="script.js"></script>
+    <h1>Welcome to Our Stationery Store! 🖊️📝</h1>
+    <div class="products">
+        <div class="product">
+            <h2>Notebook 📒</h2>
+            <img src="notebook-image-url" alt="Notebook" style="width:100%;">
+            <p>Price: $5.00</p>
+            <button onclick="addToCart('Notebook', 5)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <h2>Pen ✏️</h2>
+            <img src="pen-image-url" alt="Pen" style="width:100%;">
+            <p>Price: $1.00</p>
+            <button onclick="addToCart('Pen', 1)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <h2>Pencil ✏️</h2>
+            <img src="pencil-image-url" alt="Pencil" style="width:100%;">
+            <p>Price: $0.50</p>
+            <button onclick="addToCart('Pencil', 0.5)">Add to Cart</button>
+        </div>
+    </div>
+    <h2>Shopping Cart 🛒</h2>
+    <div class="shopping-cart" id="shopping-cart">
+        <p>No items in the cart.</p>
+    </div>
+    <button onclick="buyViaWhatsApp()">Buy via WhatsApp</button>
+    <script>
+        let cart = [];
+        function addToCart(item, price) {
+            const existingItem = cart.find(cartItem => cartItem.name === item);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name: item, price: price, quantity: 1 });
+            }
+            updateCartDisplay();
+        }
+        function updateCartDisplay() {
+            const cartDiv = document.getElementById('shopping-cart');
+            cartDiv.innerHTML = '';
+            cart.forEach(cartItem => {
+                const itemDisplay = document.createElement('div');
+                itemDisplay.className = 'cart-item';
+                itemDisplay.innerHTML = `${cartItem.name} x ${cartItem.quantity} = $${(cartItem.price * cartItem.quantity).toFixed(2)}`;
+                cartDiv.appendChild(itemDisplay);
+            });
+            if (cart.length === 0) {
+                cartDiv.innerHTML = '<p>No items in the cart.</p>';
+            }
+        }
+        function buyViaWhatsApp() {
+            let message = 'I want to buy:\n';
+            cart.forEach(item => {
+                message += `${item.name} x ${item.quantity}\n`;
+            });
+            const whatsappLink = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappLink);
+        }
+    </script>
 </body>
 </html>
